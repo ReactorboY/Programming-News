@@ -52,6 +52,71 @@ const createLinkElement = link => {
     return linkElement;
 }
 
+// create input form div element 
+const createInputElement = (name,placeholder,size) => {
+    const inputElement = document.createElement('input')
+    inputElement.type = 'text'
+    inputElement.setAttribute('name',name)
+    inputElement.setAttribute('placeholder', placeholder)
+    inputElement.setAttribute('size',size)
+    inputElement.setAttribute('required','true')
+    inputElement.classList.add('form-control')
+    return inputElement;
+}
+
+// form element 
+const createFormElement = () => {
+    const authorInput = createInputElement("author","Enter Author Name",20)
+    const titleInput = createInputElement("title","Enter Link Title",40)
+    const urlInput = createInputElement("url","Enter link url",40)
+
+    // create submit element
+    const submitElement = document.createElement('input')
+    submitElement.type = 'submit'
+    submitElement.classList.add('btn')
+    submitElement.classList.add('btn-primary')
+    submitElement.value = 'Add Link'
+
+    // create link submission form
+    const linkFormElement = document.createElement('form')
+    linkFormElement.classList.add("linkForm");
+    linkFormElement.classList.add("form-inline");
+    linkFormElement.appendChild(authorInput);
+    linkFormElement.appendChild(titleInput);
+    linkFormElement.appendChild(urlInput);
+    linkFormElement.appendChild(submitElement);
+
+    // Handle form submission
+    linkFormElement.addEventListener("submit", e => {
+        // Cancel default form behavior
+        e.preventDefault();
+
+        // Create new link object from field values
+        const newLink = new Link(
+            titleInput.value,
+            urlInput.value,
+            authorInput.value
+        );
+
+        // Add new link to page, replacing form
+        const newLinkElement = createLinkElement(newLink);
+        content.replaceChild(newLinkElement, e.target);
+
+        // Create info message indicating success
+        const infoElement = document.createElement("div");
+        infoElement.classList.add("alert");
+        infoElement.classList.add("alert-success");
+        infoElement.textContent = `The link ${newLink.title} has been succesfully added!`;
+        content.insertBefore(infoElement, newLinkElement);
+        // Remove info message after 2 seconds
+        setTimeout(() => {
+            content.removeChild(infoElement);
+        }, 2000);
+    });
+
+    return linkFormElement;
+}
+
 // add to content 
 let links = []
 links.push(new Link("Hacker News", "https://news.ycombinator.com", "Baptiste"));
@@ -62,3 +127,11 @@ links.forEach(link => {
     const linkElement = createLinkElement(link)
     content.appendChild(linkElement)
 })
+
+// Handle click on link submit button
+document.getElementById("submitButton").addEventListener("click", () => {
+    // Create link submission form
+    const formElement = createFormElement();
+    // Add form on page before the first link
+    content.insertBefore(formElement, document.querySelector(".link"));
+});
