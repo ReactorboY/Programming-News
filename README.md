@@ -1,1 +1,2 @@
-# Reactor OS a simple operating System
+# Reactor OS
+Os for Respberry Pi
