@@ -63,16 +63,17 @@ class App extends PureComponent {
             <main>
                 <div>
                     <form onSubmit={this.addItem}>
-                        <input type="text" value={newItem} onChange={this.addNewItem}/>
+                        <input type="text" value={newItem} onChange={this.addNewItem} 
+                        placeholder="Add New Todo Item"/>
                     </form>
                     {list.map(item => 
                         <div key={item.id} className="listDiv">
-                            <div style={{display:'inline-block',width:'80%'}}>
+                            <div style={{display:'inline-block',width:'90%'}}>
                                 <span>{item.title} </span>
                             </div>
                             <span>
-                                <button style={{background:'#0ba6ff',borderRadius:'10px',color:'#eee'}} 
-                                 onClick={() => this.onDismiss(item.id)} type="button">Complete</button>
+                                <button style={{background:'#0ba6ff',borderRadius:'10px',color:'#fff'}} 
+                                 onClick={() => this.onDismiss(item.id)} type="button">DONE</button>
                             </span>
                         </div>
                         )}
