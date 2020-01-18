@@ -20,7 +20,14 @@ class App extends PureComponent {
         this.state = {
             list,
         }
-    }   
+        this.onClickMe = this.onClickMe.bind(this)
+    } 
+    
+    onClickMe(id) {
+        const updatedList = this.state.list.filter(item => item.id !== id)
+        this.setState({list:updatedList})
+    }
+    
     render() {
         return (
             <main>
@@ -31,7 +38,8 @@ class App extends PureComponent {
                                 <span>{item.title} </span>
                             </div>
                             <span>
-                                <button onClick={this.onClickMe} type="button">Complete</button>
+                                <button style={{background:'#0ba6ff',borderRadius:'10px',color:'#eee'}} 
+                                 onClick={() => this.onClickMe(item.id)} type="button">Complete</button>
                             </span>
                         </div>
                         )}
