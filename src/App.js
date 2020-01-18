@@ -1,6 +1,4 @@
 import React, { PureComponent } from 'react'
-import Search from './components/Search'
-import Table from './components/Table'
 import './App.css'
 
 const list = [
@@ -31,10 +29,12 @@ class App extends PureComponent {
         super(props)
         this.state = {
             list,
-            searchTerm:''
+            searchTerm:'',
+            newItem:''
         }
         this.onDismiss = this.onDismiss.bind(this)
-        this.onSearchChange = this.onSearchChange.bind(this)
+        this.addNewItem = this.addNewItem.bind(this)
+        this.addItem = this.addItem.bind(this)
     } 
     
     onDismiss(id) {
@@ -42,24 +42,40 @@ class App extends PureComponent {
         this.setState({list:updatedList})
     }
 
-    onSearchChange(e) {
-        this.setState({searchTerm: e.target.value})
+    addNewItem = e => {
+        this.setState({newItem:e.target.value})
+    }
+
+    addItem = e => {
+        e.preventDefault()
+        const updatedList = {
+            title: this.state.newItem,
+            id: this.state.list.length,
+            completed: false
+        }
+        this.setState({list: [...this.state.list,updatedList], newItem:''})
+
     }
     
     render() {
-        const {searchTerm, list} = this.state
+        const {list,newItem} = this.state
         return (
             <main>
                 <div>
-                    <Search 
-                        value={searchTerm}
-                        onChange={this.onSearchChange}
-                    />
-                    <Table 
-                        list={list}
-                        searchTerm={searchTerm}
-                        onDismiss={this.onDismiss}
-                    />
+                    <form onSubmit={this.addItem}>
+                        <input type="text" value={newItem} onChange={this.addNewItem}/>
+                    </form>
+                    {list.map(item => 
+                        <div key={item.id} className="listDiv">
+                            <div style={{display:'inline-block',width:'80%'}}>
+                                <span>{item.title} </span>
+                            </div>
+                            <span>
+                                <button style={{background:'#0ba6ff',borderRadius:'10px',color:'#eee'}} 
+                                 onClick={() => this.onDismiss(item.id)} type="button">Complete</button>
+                            </span>
+                        </div>
+                        )}
                 </div>
             </main>
         )
